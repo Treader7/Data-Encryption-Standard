@@ -18,8 +18,11 @@ The project implements the Data encryption standard (DES) algorithm in Python. T
 ## Quick Start
 
 ### Installation
-# clone the repository
+```bash
+# Clone the repository
+
 git clone [https://github.com/Treader7/Data-Encryption-Standard.git]
 cd Data-Encryption-Standard
+
 # Install dependencies
 pip install -r Requirements.txt
