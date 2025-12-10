@@ -74,14 +74,19 @@ def des_encrypt(plaintext, key):
         encrypted_bits = des_block(block_bits, round_keys)
         ciphertext_bits.extend(encrypted_bits)
     ciphertext= bit_array_to_string(ciphertext_bits)
-    return ciphertext
+    return ciphertext.encode('latin-1').hex().upper()
 
-def des_decrypt(ciphertext, key):
+def des_decrypt(ciphertext_hex, key):
     if len(key) != 8:
         raise ValueError("Key must be 8 characters (64 bits) long")
     
-    round_keys = generate_round_keys(key)
-    round_keys.reverse()
+    try:
+        ciphertext_bytes= bytes.fromhex(ciphertext_hex)
+        ciphertext = ciphertext_bytes.decode('latin-1')
+    except:
+        raise ValueError("Invalid ciphertext format. Must be a valid hex string.")
+
+    round_keys = generate_decryption_keys(key)
     plaintext_bits = []
     for i in range(0, len(ciphertext), 8):
         block = ciphertext[i:i+8]
@@ -91,3 +96,60 @@ def des_decrypt(ciphertext, key):
     plaintext= bit_array_to_string(plaintext_bits)
     plaintext = remove_padding(plaintext)
     return plaintext
+
+### User Interface ###
+def get_valid_input(prompt, min_length=1, max_length= None):
+    while True:
+        user_input = input(prompt)
+        if not user_input:
+            print("Input cannot be empty. Please try again.")
+            continue
+        if max_length and len(user_input) > max_length:
+            print(f"Input cannot exceed {max_length} characters. Please try again.")
+            continue
+        return user_input
+if __name__=="__main__":
+    print("Welcome to the DES Encryption/Decryption Tool")
+    print("Enter 'quit' to exit\n")
+    
+    while True:
+        print("\nChoose operation:")
+        print("1. Encrypt")
+        print("2. Decrypt")
+        choice = input("Enter 1 or 2 (or 'quit'): ").strip().lower()
+
+        if choice == 'quit':
+            print("Goodbye!")
+            break
+        
+        if choice not in ['1', '2']:
+            print("Invalid choice. Enter 1, 2, or 'quit'.")
+            continue
+
+        while True:
+            key = get_valid_input("Enter 8-character key: ")
+            if len(key) == 8:
+                break
+            print("Key must be exactly 8 characters!")
+
+        if choice == '1':
+            prompt = "Enter message to encrypt: "
+        else:
+            prompt = "Enter ciphertext to decrypt: "
+        
+        text = get_valid_input(prompt)
+        
+        # Process
+        try:
+            if choice == '1':
+                result = des_encrypt(text, key)
+                print(f"\n Encrypted: '{result}'")
+                print(f"   Hex: {result.encode('latin-1').hex().upper()}")
+            else:
+                result = des_decrypt(text, key)
+                print(f"\n Decrypted: '{result}'")
+                
+        except ValueError as e:
+            print(f"\n Error: {e}")
+        except Exception as e:
+            print(f"\n Unexpected error: {e}")
