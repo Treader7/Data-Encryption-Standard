@@ -93,8 +93,14 @@ def des_decrypt(ciphertext_hex, key):
         block_bits = string_to_bit_array(block)
         decrypted_bits = des_block(block_bits, round_keys)
         plaintext_bits.extend(decrypted_bits)
+
     plaintext= bit_array_to_string(plaintext_bits)
-    plaintext = remove_padding(plaintext)
+    
+    if len(plaintext)>0:
+        padding_length = ord(plaintext[-1])
+        if 1 <= padding_length <= 8:
+            if all(ord(plaintext[-(i+1)]) == padding_length for i in range(padding_length)):
+                plaintext = plaintext[:-padding_length]
     return plaintext
 
 ### User Interface ###
