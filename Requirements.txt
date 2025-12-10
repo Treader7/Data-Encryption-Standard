@@ -1,2 +1,3 @@
 # no external dependancies required
-# Python 3 needed
+# Python 3.0 or higher is required to run this project.
+# no external libraries are used in this project.
