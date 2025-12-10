@@ -26,7 +26,7 @@ def apply_permutation(bit_array, permutation_table):
 
 def left_shift(bit_array, shifts):
     # left shifts a bit array by the number of shifts
-    return bits[n:] + bits[:n]
+    return bit_array[shifts:] + bit_array[:shifts]
 
 def generate_round_keys(key):
     # generate all 16 round keys from the intial 64 bit key
@@ -34,9 +34,10 @@ def generate_round_keys(key):
         if len(key) != 8:
             raise ValueError("Key must be 8 characters (64 bits) long")
         key_bits = string_to_bit_array(key)
-    elif len (key) != 64:
-        raise ValueError("Key must be 64 bits long")
+    elif len (key) == 64:
         key_bits = key
+    else:
+        raise ValueError("Key must be 64 bits long")
 
     key_56 = apply_permutation(key_bits, Permuted_Choice_1)
 
@@ -46,7 +47,7 @@ def generate_round_keys(key):
     round_keys = []
 
     for round_num in range (16):
-        shift-amount = Shift_Schedule[round_num]
+        shift_amount = Shift_Schedule[round_num]
         c= left_shift(c, shift_amount)
         d= left_shift(d, shift_amount)
 
