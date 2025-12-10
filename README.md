@@ -8,7 +8,8 @@ The project implements the Data encryption standard (DES) algorithm in Python. T
 - permutations.py: All permutation tables
 - sboxes.py: S-boxes and substitution functions
 - key_schedule.py: 16 round key generation
-- modes.py: ECB and CBC modes of operation
+- diagrams: Includes diagrams of core operations of DES
+- test_vectors: Includes offcial NIST test vectors 
 - Requirements.txt: Python dependancies
 - .gitignore: Git ignore file
 - License: MIT opensoure license
