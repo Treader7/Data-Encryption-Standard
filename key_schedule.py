@@ -14,7 +14,6 @@ def string_to_bit_array(text):
     for char in text:
         ascii_val = ord(char)
         for i in range (7, -1, -1):
-            bit = (ascii_val >> i) & 1
             bit_array.append((ascii_val >> i) & 1)
     return bit_array
 
